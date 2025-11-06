@@ -1,9 +1,7 @@
 name: Deploy (GitHub Pages — self-healing)
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch: {}   # tylko ręcznie, żeby nie wchodził w drogę Static HTML
 
 permissions:
   contents: read
