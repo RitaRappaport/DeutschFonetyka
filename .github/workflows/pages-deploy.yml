@@ -18,18 +18,9 @@ jobs:
   build-and-upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Show repo tree (debug)
-        run: |
-          echo "Repo: $GITHUB_REPOSITORY"
-          echo "Branch: $GITHUB_REF_NAME"
-          ls -la
-          echo "---- files end ----"
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -40,9 +31,7 @@ jobs:
         run: |
           set -e
           if [ -f package.json ]; then
-            echo "package.json found – trying install/build"
             if [ -f package-lock.json ]; then npm ci; else npm i; fi
-            # build z tolerancją: najpierw skrypt, potem bezpośrednio vite
             (npm run build || npx vite build) || echo "BUILD_FAILED=1" >> $GITHUB_ENV
           else
             echo "NO_NODE=1" >> $GITHUB_ENV
@@ -53,35 +42,16 @@ jobs:
         if: ${{ !hashFiles('dist/**') }}
         shell: bash
         run: |
-          set -e
-          echo "No dist/ found. Creating fallback page."
           mkdir -p _pages_fallback
           cat > _pages_fallback/index.html <<'HTML'
 <!doctype html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DeutschFonetyka — fallback</title>
-  <style>
-    body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto;padding:24px;max-width:720px;margin:0 auto;}
-    code{background:#f3f5f7;padding:2px 6px;border-radius:6px}
-    .tag{display:inline-block;background:#eef7ff;border:1px solid #cde2ff;padding:2px 8px;border-radius:999px;margin-right:8px}
-  </style>
-</head>
-<body>
-  <h1>🔧 Wdrożono stronę — ale build aplikacji się nie powiódł</h1>
-  <p>To jest strona tymczasowa (fallback), żeby <b>adres działał</b>. Poniżej wskazówki co poprawić.</p>
-  <h2>Co sprawdzić lokalnie</h2>
-  <ol>
-    <li>Uruchom w PowerShell: <code>npm ci</code> (albo <code>npm i</code>), potem <code>npx vite build</code>.</li>
-    <li>Jeśli zobaczysz błąd parsera HTML: podmień <code>index.html</code> na czysty plik Vite.</li>
-    <li>Po poprawce: commit + push — workflow sam się uruchomi i zastąpi fallback właściwą aplikacją.</li>
-  </ol>
-  <p class="tag">GitHub Pages: działa</p>
-  <p class="tag">Build app: do poprawy</p>
-</body>
-</html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DeutschFonetyka — fallback</title>
+<style>body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto;padding:24px;max-width:720px;margin:0 auto;}code{background:#f3f5f7;padding:2px 6px;border-radius:6px}</style>
+</head><body>
+<h1>🔧 Strona działa (fallback), ale build aplikacji się nie powiódł</h1>
+<p>Sprawdź lokalnie: <code>npm ci</code> → <code>npx vite build</code>. Po poprawce zrób push — ten fallback zostanie zastąpiony aplikacją.</p>
+</body></html>
 HTML
 
       - name: Setup Pages
