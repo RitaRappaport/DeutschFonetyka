@@ -48,6 +48,8 @@ const mvpExercises = [
 ]
 
 export default function App() {
+  const appEnv = import.meta.env.VITE_APP_ENV || 'production'
+
   return (
     <div className="page">
       <header className="hero">
@@ -64,6 +66,7 @@ export default function App() {
             <span className="tag">Web (desktop/tablet)</span>
             <span className="tag">Ćwiczenia artykulacyjne</span>
             <span className="tag">Tryb dziecięcy + RODO/COPPA</span>
+            <span className="tag env-badge">Środowisko: {appEnv}</span>
           </div>
         </div>
       </header>

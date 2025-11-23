@@ -49,6 +49,12 @@
   border: 1px solid rgba(59, 130, 246, 0.25);
 }
 
+.env-badge {
+  border-style: dashed;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .panel {
   background: #ffffff;
   border-radius: 16px;
