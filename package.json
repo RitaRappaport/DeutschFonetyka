@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:logopeda": "vite --mode logopeda",
     "build": "vite build",
     "preview": "vite preview --port 4173"
   },

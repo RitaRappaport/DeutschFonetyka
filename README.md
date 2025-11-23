@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+# DeutschFonetyka (React + TypeScript + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Webowa aplikacja do ćwiczeń wymowy (PL/EN/DE) z multimedialnym feedbackiem.
 
-Currently, two official plugins are available:
+## Uruchomienie w środowisku „Logopeda”
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Zainstaluj zależności z publicznego rejestru NPM (przy problemach 403 patrz sekcja poniżej):
 
-## React Compiler
+   ```bash
+   npm install --registry=https://registry.npmjs.org
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. Uruchom aplikację w trybie Logopeda (Vite mode = `logopeda`):
 
-## Expanding the ESLint configuration
+   ```bash
+   npm run dev:logopeda
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+   Domyślnie Vite wystartuje na porcie `5173`. Jeśli korzystasz z tunelu/hostowania, dodaj `--host`.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+3. Zmienne środowiskowe dla trybu Logopeda są w pliku `.env.logopeda` (np. `VITE_APP_ENV=logopeda`).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Jak naprawić błąd `npm ERR! 403 Forbidden`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Wymuś publiczny rejestr:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+  ```bash
+  npm config set registry https://registry.npmjs.org
+  npm install
+  ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Usuń błędne ustawienia proxy (błąd „Unknown env config \"http-proxy\"”):
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+  ```bash
+  npm config delete proxy
+  npm config delete https-proxy
+  unset NPM_CONFIG_HTTP_PROXY NPM_CONFIG_HTTPS_PROXY HTTP_PROXY HTTPS_PROXY
+  ```
+
+- Jeżeli w sieci wymagane jest proxy, upewnij się, że adres jest poprawny i wspiera HTTPS.
+
+Po usunięciu błędnych proxy i ustawieniu rejestru instalacja powinna przejść poprawnie.
